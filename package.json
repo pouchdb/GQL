@@ -1,7 +1,7 @@
 {
-  "name": "GQL",
+  "name": "pouchdb-gql",
   "version": "0.0.0",
-  "description": "The Google Query Language (GQL) interface provides an alternative method for accessing data. The version of GQL implemented here is based on the Google Visualization API Query Language (https://developers.google.com/chart/interactive/docs/querylanguage). The syntax of GQL queries should be familiar to those who have used SQL, but the capabilities of GQL are much more limited.",
+  "description": "Google Query language plugin for pouchdb",
   "main": "pouchdb.gql.js",
   "scripts": {
     "test": "./node_modules/istanbul/lib/cli.js test ./node_modules/mocha/bin/_mocha test/test.js"
