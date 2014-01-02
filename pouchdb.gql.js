@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  var GQL= function (db) {
+  function GQL (db) {
 
     var viewQuery= function (query, options) {
       if (!options.complete) {
@@ -885,11 +885,17 @@
         reason: message || "Generic pivot error"
       };
     }
-  };
+  }
 
   // Deletion is a noop since we dont store the results of the view
   GQL._delete = function () { };
-
-  PouchDB.plugin('gql', GQL);
-
+  if(typeof PouchDB !== 'undefined'){
+    PouchDB.plugin('gql', GQL);
+  }else if(typeof define === 'function' && define.amd){
+    define(function(){
+      return GQL;
+    });
+  }else if(typeof 'module' !== 'undefined'){
+    module.exports = GQL;
+  }
 }());

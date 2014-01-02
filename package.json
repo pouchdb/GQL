@@ -1,0 +1,25 @@
+{
+  "name": "GQL",
+  "version": "0.0.0",
+  "description": "The Google Query Language (GQL) interface provides an alternative method for accessing data. The version of GQL implemented here is based on the Google Visualization API Query Language (https://developers.google.com/chart/interactive/docs/querylanguage). The syntax of GQL queries should be familiar to those who have used SQL, but the capabilities of GQL are much more limited.",
+  "main": "pouchdb.gql.js",
+  "scripts": {
+    "test": "./node_modules/istanbul/lib/cli.js test ./node_modules/mocha/bin/_mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pouchdb/GQL.git"
+  },
+  "author": "",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/pouchdb/GQL/issues"
+  },
+  "homepage": "https://github.com/pouchdb/GQL",
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.16.2",
+    "pouchdb": "~1.0.0",
+    "istanbul": "~0.2.3"
+  }
+}

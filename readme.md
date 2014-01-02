@@ -11,6 +11,10 @@ Callbacks are in the node.js idiom of `function(err, data)` Where the first argu
 unless there is an error, and further arguments specify the result.
 Note that only identifiers and string literals are case-sensitive.
 
+## Usage
+
+In the browser simply add pouchdb.gql.js in a script tag after the pouchdb script tag, otherwise in node or with AMD after getting GQL in scope (i.e. `var GQL = require('GQL');`) then you must register the plugin with `PouchDB.plugin('gql', GQL);`
+
 ### Language Syntax
 
  * [Select](#select)
