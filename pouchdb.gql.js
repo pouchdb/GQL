@@ -1,8 +1,9 @@
-/*global Pouch: true, pouchCollate */
+/*global Pouch: true, pouchCollate: true */
 
 (function () {
   "use strict";
-
+  var pouchCollate = require('pouchdb-collate');
+    
   function GQL (db) {
 
     var viewQuery= function (query, options) {
@@ -310,6 +311,8 @@
 
         return parseTree;
       };
+      
+      
 
       var selectFun= (function () {
 
