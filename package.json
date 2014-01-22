@@ -4,7 +4,8 @@
   "description": "Google Query language plugin for pouchdb",
   "main": "pouchdb.gql.js",
   "scripts": {
-    "test": "./node_modules/istanbul/lib/cli.js test ./node_modules/mocha/bin/_mocha test/test.js"
+    "test": "./node_modules/istanbul/lib/cli.js test ./node_modules/mocha/bin/_mocha test/test.js",
+    "build": "mkdir -p dist && browserify pouchdb.gql.js -o dist/pouchdb.gql.js -s GQL"
   },
   "repository": {
     "type": "git",
@@ -17,13 +18,14 @@
   },
   "homepage": "https://github.com/pouchdb/GQL",
   "dependencies": {
-    "pouchdb-collate": "~0.1.1" 
+    "pouchdb-collate": "~0.1.1"
   },
   "devDependencies": {
     "chai": "~1.8.1",
     "mocha": "~1.16.2",
     "pouchdb": "~1.0.0",
     "istanbul": "~0.2.3",
-    "underscore": "~1.5.2" 
+    "underscore": "~1.5.2",
+    "browserify": "~3.23.1"
   }
 }
