@@ -1,0 +1,32 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "newcap": false,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "eqnull": true,
+  "browser": true,
+  "node": true,
+  "strict": true,
+  "globalstrict": true,
+  "globals": { "PouchDB": true},
+  "white": true,
+  "indent": 2,
+  "maxlen": 100,
+  "predef": [
+    "process",
+    "global",
+    "require",
+    "console",
+    "describe",
+    "beforeEach",
+    "afterEach",
+    "before",
+    "after",
+    "it",
+    "emit"
+  ]
+}
+
