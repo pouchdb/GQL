@@ -3,18 +3,18 @@ var pouchCollate = require('pouchdb-collate');
 
 function GQL(db) {
 
-  var viewQuery = function (query, options) {
+  function viewQuery(query, options) {
     if (!options.complete) {
       return;
     }
 
     var results = [];
 
-    var isAggregator = function (str) {
+    function isAggregator(str) {
       return (/max|average|min|sum|count/).test(str);
-    };
+    }
 
-    var getIdentifierList = function (str) {
+    function getIdentifierList(str) {
       var columns;
       if (!str) {
         return [];
@@ -28,57 +28,57 @@ function GQL(db) {
       return columns.map(function (id) {
         return id.replace(/`([^`]*)`/, "$1");
       });
-    };
+    }
 
-    var parse = function (queryString) {
+    function parse(queryString) {
 
       var lexedTokens = (function () {
         var tokens = [],
           c, index = 0,
           currentString = "";
 
-        var isOperator = function (c) {
+        function isOperator(c) {
           return (/[=<>!+\-*\/(),]/).test(c);
-        };
-        var isFullWordOperator = function (str) {
+        }
+        function isFullWordOperator(str) {
           return (/^and$|^or$|^not$|^is$/).test(str);
-        };
-        var isBooleanLiteral = function (str) {
+        }
+        function isBooleanLiteral(str) {
           return (/true|false/).test(str);
-        };
-        var isDigit = function (c) {
+        }
+        function isDigit(c) {
           return (/[0-9.]/).test(c);
-        };
-        var isWhiteSpace = function (c) {
+        }
+        function isWhiteSpace(c) {
           return (/\s/).test(c);
-        };
-        var isConstant = function (str) {
+        }
+        function isConstant(str) {
           return (/null/).test(str);
-        };
-        var isString = function (str) {
+        }
+        function isString(str) {
           return (/^".*"$|^'.*'$/).test(str);
-        };
+        }
 
         //always ending with a space to simplify lexer parsing
         queryString += " ";
 
-        var advance = function () {
+        function advance() {
           if (index < queryString.length) {
             c = queryString[index++];
             return true;
           }
           return false;
-        };
+        }
 
-        var addToken = function (type, value) {
+        function addToken(type, value) {
           currentString = "";
           tokens.push({
             type: type,
             value: value
           });
-        };
+        }
 
-        var handleDelimitedCharacters = function () {
+        function handleDelimitedCharacters() {
           var normalizedString = currentString.toLowerCase();
           if (normalizedString !== "") {
             //full-word operators, e.g. not, where
@@ -99,14 +99,14 @@ function GQL(db) {
               addToken("identifier", normalizedString);
             }
           }
-        };
+        }
 
-        var pairedOperator = function () {
+        function pairedOperator() {
           addToken(c + queryString[index]);
           advance();
-        };
+        }
 
-        var quotedString = function (delimiter, label) {
+        function quotedString(delimiter, label) {
           while (advance()) {
             if (c !== delimiter) {
               currentString += c;
@@ -116,7 +116,7 @@ function GQL(db) {
             }
           }
           throw GQL.Errors.LEXER_ERROR(label + " needs a closing " + delimiter, index);
-        };
+        }
 
         while (advance()) {
           //back quoted identifiers
@@ -177,34 +177,34 @@ function GQL(db) {
         symbolTable = {}, index = 0,
         token;
 
-      var advance = function () {
+      function advance() {
         if (index < lexedTokens.length) {
           token = interpretToken(lexedTokens[index++]);
           return true;
         }
         return false;
-      };
+      }
 
-      var peekToken = function (n) {
+      function peekToken(n) {
         n = n || 0;
         if (index + n < lexedTokens.length) {
           return interpretToken(lexedTokens[index + n]);
         }
         return null;
-      };
+      }
 
-      var interpretToken = function (token) {
+      function interpretToken(token) {
         var sym = Object.create(symbolTable[token.type]);
         sym.type = token.type;
         sym.value = token.value;
         return sym;
-      };
+      }
 
-      var isFunction = function (name) {
+      function isFunction(name) {
         return isAggregator(name) || /lower|upper/.test(name.toLowerCase());
-      };
+      }
 
-      var expression = function (rbp) {
+      function expression(rbp) {
         var left;
         advance();
         if (!token.nud) {
@@ -219,18 +219,18 @@ function GQL(db) {
           left = token.led(left);
         }
         return left;
-      };
+      }
 
-      var symbol = function (id, nud, lbp, led) {
+      function symbol(id, nud, lbp, led) {
         var sym = symbolTable[id] || {};
         symbolTable[id] = {
           lbp: sym.lbp || lbp,
           nud: sym.nud || nud,
           led: sym.led || led
         };
-      };
+      }
 
-      var infix = function (id, lbp, rbp, led) {
+      function infix(id, lbp, rbp, led) {
         rbp = rbp || lbp;
         symbol(id, null, lbp, led || function (left) {
           return {
@@ -239,16 +239,16 @@ function GQL(db) {
             right: expression(rbp)
           };
         });
-      };
+      }
 
-      var prefix = function (id, rbp) {
+      function prefix(id, rbp) {
         symbol(id, function () {
           return {
             type: id,
             right: expression(rbp)
           };
         });
-      };
+      }
 
       infix("+", 50);
       infix("-", 50);
@@ -337,7 +337,7 @@ function GQL(db) {
       } while (peekToken().type !== "(end)");
 
       return parseTree;
-    };
+    }
 
 
 
@@ -358,10 +358,10 @@ function GQL(db) {
       //parse the tokens and add appropriate labels to the top level tokens
       var parsedTokens = (function () {
 
-        var statementToString = function (statement) {
+        function statementToString(statement) {
           var result = [];
 
-          var recur = function (node) {
+          function recur(node) {
             switch (node.type) {
               case "boolean":
                 return node.value.toString();
@@ -393,11 +393,11 @@ function GQL(db) {
                 returnString += node.type + " ";
                 return returnString += recur(node.right);
             }
-          };
+          }
 
           result.push(recur(statement));
           return result.join(' ');
-        };
+        }
 
         var labels = {};
         if (query.label) {
@@ -536,8 +536,8 @@ function GQL(db) {
           }
         };
 
-        var parseTreeSearch = function (condition) {
-          var recur = function (parentNode) {
+        function parseTreeSearch(condition) {
+          function recur(parentNode) {
             if (!parentNode) {
               return false;
             }
@@ -548,7 +548,7 @@ function GQL(db) {
               return true;
             }
             return recur(parentNode.right);
-          };
+          }
 
           var matchesCondition = false;
 
@@ -559,15 +559,15 @@ function GQL(db) {
             }
           }
           return matchesCondition;
-        };
+        }
 
-        var containsAggregator = function () {
+        function containsAggregator() {
           return parseTreeSearch(function (node) {
             return node.type === "call" && isAggregator(node.name);
           });
-        };
+        }
 
-        var containsIdentifierWithoutAggregator = function () {
+        function containsIdentifierWithoutAggregator() {
           return parseTreeSearch(function (node) {
             if (node.type === "call") {
               if (isAggregator(node.name)) {
@@ -584,13 +584,13 @@ function GQL(db) {
               return true;
             }
           });
-        };
+        }
 
-        var pivotOverlap = function (pivotingColumns) {
+        function pivotOverlap(pivotingColumns) {
           var groupByColumns = getIdentifierList(query.groupBy);
           var selectColumns = [];
 
-          var recur = function (parentNode) {
+          function recur(parentNode) {
             if (!parentNode) {
               return;
             }
@@ -603,7 +603,7 @@ function GQL(db) {
             }
             recur(parentNode.left);
             recur(parentNode.right);
-          };
+          }
 
           parsedTokens.forEach(function (node) {
             recur(node);
@@ -616,9 +616,9 @@ function GQL(db) {
             }
           }
           return false;
-        };
+        }
 
-        var parseNode = function (node, doc) {
+        function parseNode(node, doc) {
           switch (node.type) {
             case "boolean":
               return node.value;
@@ -666,7 +666,7 @@ function GQL(db) {
               }
               throw GQL.Errors.PARSING_ERROR("Unknown token type: " + node.type);
           }
-        };
+        }
 
 
         return (function () {
@@ -720,14 +720,14 @@ function GQL(db) {
                   }
                 });
 
-                var processPivotGroups = function (statement) {
+                function processPivotGroups(statement) {
                   if (statement.type === "identifier") {
                     viewRow[statement.label] = parseNode(statement, pivotGroups[pg]);
                   } else if (statement.type === "call" && isAggregator(statement.name)) {
                     //aggregate across entire pivot group
                     viewRow[pg + " " + statement.label] = parseNode(statement, pivotGroups[pg]);
                   }
-                };
+                }
 
                 for (var pg in pivotGroups) {
                   parsedTokens.forEach(processPivotGroups);
@@ -763,7 +763,7 @@ function GQL(db) {
 
       var parsedTokens = parse(query.where);
 
-      var interpreter = function (doc) {
+      function interpreter(doc) {
 
         var operators = {
           "+": function (a, b) {
@@ -816,7 +816,7 @@ function GQL(db) {
           }
         };
 
-        var parseNode = function (node) {
+        function parseNode(node) {
           switch (node.type) {
             case "boolean":
               return node.value;
@@ -850,10 +850,10 @@ function GQL(db) {
               }
               throw GQL.Errors.PARSING_ERROR("Unknown token type " + node.type);
           }
-        };
+        }
 
         return parseNode(parsedTokens[0]);
-      };
+      }
 
       return interpreter;
     }());
@@ -867,18 +867,18 @@ function GQL(db) {
 
       var columns = getIdentifierList(query.groupBy);
 
-      var interpreter = function (doc) {
+      function interpreter(doc) {
         var key = [];
         columns.forEach(function (col) {
           key.push(doc[col]);
         });
         return key;
-      };
+      }
 
       return interpreter;
     }());
 
-    var map = function (doc) {
+    function map(doc) {
       if (whereFun(doc)) {
         results.push({
           id: doc._id,
@@ -886,18 +886,18 @@ function GQL(db) {
           value: doc
         });
       }
-    };
+    }
 
-    var reduce = function (keys, values) {
+    function reduce(keys, values) {
       return selectFun(values);
-    };
+    }
 
     //// exclude  _conflicts key by default
     //// or to use options.conflicts if it's set when called by db.query
     var conflicts = ('conflicts' in options ? options.conflicts : false);
 
     //only proceed once all documents are mapped and joined
-    var checkComplete = function () {
+    function checkComplete() {
       results.sort(function (a, b) {
         return pouchCollate(a.key, b.key);
       });
@@ -939,7 +939,7 @@ function GQL(db) {
       options.complete(null, {
         rows: flattenedOutput
       });
-    };
+    }
 
     db.changes({
       conflicts: conflicts,
@@ -953,9 +953,9 @@ function GQL(db) {
         checkComplete();
       }
     });
-  };
+  }
 
-  var query = function (fun, opts, callback) {
+  function query(fun, opts, callback) {
 
     if (typeof opts === 'function') {
       callback = opts;
@@ -975,7 +975,7 @@ function GQL(db) {
     }
 
     return opts.complete(GQL.Errors.UNRECOGNIZED_QUERY);
-  };
+  }
 
   return {
     'gql': query
