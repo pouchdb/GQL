@@ -11,7 +11,6 @@
   "node": true,
   "strict": true,
   "globalstrict": true,
-  "globals": { "PouchDB": true},
   "white": true,
   "indent": 2,
   "maxlen": 100,

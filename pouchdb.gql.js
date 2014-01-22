@@ -1,4 +1,3 @@
-/*global Pouch: true*/
 "use strict";
 var pouchCollate = require('pouchdb-collate');
 
@@ -1021,6 +1020,6 @@ GQL.Errors = {
 module.exports = GQL;
 // Deletion is a noop since we dont store the results of the view
 GQL._delete = function () {};
-if (typeof PouchDB !== 'undefined') {
-  PouchDB.plugin('gql', GQL);
+if (typeof window !== 'undefined' && window.PouchDB) {
+  window.PouchDB.plugin('gql', GQL);
 }
