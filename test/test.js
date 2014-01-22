@@ -1,7 +1,5 @@
 var PouchDB = require('pouchdb');
 var GQL = require('../pouchdb.gql');
-//var Mapreduce = require('pouchdb-mapreduce');
-
 
 var chai = require('chai');
 var should = chai.should();
@@ -75,7 +73,7 @@ describe('GQL',function(){
                   expect(actual.rows.length).to.equal(expected.length);
                   done();            
               } else {
-                done(err);
+                  done(new Error(err.reason));
               }
             });
         });   
@@ -101,7 +99,7 @@ describe('GQL',function(){
                   expect(actual.rows.length).to.equal(expected.length);
                   done();            
               } else {
-                done(err);
+                  done(new Error(err.reason));
               }
             });
         });   
@@ -160,7 +158,7 @@ describe('GQL',function(){
                 expect(actual.rows.length).to.equal(expected.length);
                 done();            
             } else {
-              done(err);
+                done(new Error(err.reason));
             }
           });
       });   
@@ -181,20 +179,19 @@ describe('GQL',function(){
                 expect(actual.rows.length).to.equal(expected.length);
                 done();            
             } else {
-              done(err);
+                done(new Error(err.reason));
             }
           });
       });   
     });
 
-    /* ------------ test is failing - never returns ------------- */
-    // it("should return count aggregation for group by clause", function(done) {
-    //     //this.timeout(0);
-    //     var query = {select: "average(salary), isSenior", groupBy: "isSenior"};
-    //   //var query = "select lunchTime, count(age) group by isSenior";
-    //   var expected = [{"lunchTime": "12:00:00", "count-age": "2"}, 
-    //                  {"lunchTime": "13:00:00", "count-age": "1"}, 
-    //                  {"lunchTime": "12:00:00", "count-age": "2"}]; 
+    // /* ------------ test is failing ----------------------------- */
+    // it("should return average aggregation for group by clause", function(done) {
+    //     
+    //   //var query = {select: "name, average(salary)", groupBy: "name"}; //- error is 'Uncaught'
+    //   var query = {select: "isSenior, average(salary)", groupBy: "isSenior"}; //- error is 'Error: If an aggregation function is used in the select clause, all identifiers in the select clause must be wrapped by an aggregation function or appear in the group-by clause.'
+    //   var expected = [{"isSenior": true, "average-salary": "2"}, 
+    //                  {"isSenior": false, "average-salary": "1"}]; 
     //    
     //   PouchDB.plugin('gql', GQL);
     //   PouchDB('testdb',function(err,db){
@@ -203,14 +200,17 @@ describe('GQL',function(){
     //             var intersection = expected.filter(function(n) {
     //               return _.findWhere(actual.rows, n) != undefined
     //             });
-    //             console.log(" ");
+    //             console.log(' ');
     //             for (var i=0; i< actual.rows.length; i++) {
     //                 console.log(actual.rows[i]);
     //             }
     //             expect(intersection).to.have.length(expected.length);
     //             expect(actual.rows.length).to.equal(expected.length);
     //             done();            
-    //         } 
+    //         } else {
+    //             console.log(err);
+    //             done(new Error(err.reason));
+    //         }
     //       });
     //   });   
     // });
