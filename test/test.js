@@ -5,7 +5,6 @@ var GQL = require('../pouchdb.gql');
 
 var chai = require('chai');
 var should = chai.should();
-var expect = chai.expect;
 var _ = require('underscore');
 
 
@@ -96,7 +95,7 @@ describe('GQL', function () {
     should.not.exist(db.gql);
     PouchDB.plugin('gql', GQL);
     PouchDB('testdb', function (err, db) {
-      should.exist(db.gql);
+      var throwaway = db.gql.should.exist;
       done();
     });
   });
@@ -170,8 +169,8 @@ describe('GQL', function () {
             var intersection = expected.filter(function (n) {
               return _.findWhere(actual.rows, n) !== undefined;
             });
-            expect(intersection).to.have.length(expected.length);
-            expect(actual.rows.length).to.equal(expected.length);
+            intersection.should.have.length(expected.length);
+            actual.rows.should.have.length(expected.length);
             done();
           } else {
             done(new Error(err.reason));
@@ -211,8 +210,8 @@ describe('GQL', function () {
             var intersection = expected.filter(function (n) {
               return _.findWhere(actual.rows, n) !== undefined;
             });
-            expect(intersection).to.have.length(expected.length);
-            expect(actual.rows.length).to.equal(expected.length);
+            intersection.should.have.length(expected.length);
+            actual.rows.should.have.length(expected.length);
             done();
           } else {
             done(new Error(err.reason));
@@ -284,9 +283,8 @@ describe('GQL', function () {
             var intersection = expected.filter(function (n) {
               return _.findWhere(actual.rows, n) !== undefined;
             });
-            console.log(" ");
-            expect(intersection).to.have.length(expected.length);
-            expect(actual.rows.length).to.equal(expected.length);
+            intersection.should.have.length(expected.length);
+            actual.rows.should.have.length(expected.length);
             done();
           } else {
             done(new Error(err.reason));
@@ -313,8 +311,8 @@ describe('GQL', function () {
             var intersection = expected.filter(function (n) {
               return _.findWhere(actual.rows, n) !== undefined;
             });
-            expect(intersection).to.have.length(expected.length);
-            expect(actual.rows.length).to.equal(expected.length);
+            intersection.should.have.length(expected.length);
+            actual.rows.should.have.length(expected.length);
             done();
           } else {
             done(new Error(err.reason));
@@ -360,7 +358,7 @@ describe('GQL', function () {
 
   });
 
-  describe('pivot', function () {
+  describe.skip('pivot', function () {
 
     it("should pivot three rows of one column into one row of three columns", function (done) {
       var query = {
@@ -380,8 +378,8 @@ describe('GQL', function () {
             var intersection = expected.filter(function (n) {
               return _.findWhere(actual.rows, n) !== undefined;
             });
-            expect(intersection).to.have.length(expected.length);
-            expect(actual.rows.length).to.equal(expected.length);
+            intersection.should.have.length(expected.length);
+            actual.rows.should.have.length(expected.length);
             done();
           } else {
             done(new Error(err.reason));
@@ -390,57 +388,57 @@ describe('GQL', function () {
       });
     });
 
-    // it("should pivot ", function (done) {
-    //   var query = "select dept, sum(salary) group by dept pivot lunchTime";
-    //   var expected = [{"dept": "Eng", 
-    //                  "12:00:00 sum-salary": "1500", 
-    //                  "13:00:00 sum-salary": "600"}, 
-    //                  {"dept": "Marketing", 
-    //                   "12:00:00 sum-salary": "null", 
-    //                   "13:00:00 sum-salary": "800"}, 
-    //                  {"dept": "Sales", 
-    //                   "12:00:00 sum-salary": "750", 
-    //                   "13:00:00 sum-salary": "null"}];
-    // });
-    //   
-    // it("should pivot ", function (done) {
-    //   var query = "select lunchTime, sum(salary) group by lunchTime pivot dept";
-    //   var expected = [{"dept": "Eng", 
-    //                  "12:00:00 sum-salary": "1500", 
-    //                  "13:00:00 sum-salary": "600"}, 
-    //                  {"dept": "Marketing", 
-    //                   "12:00:00 sum-salary": "null", 
-    //                   "13:00:00 sum-salary": "800"}, 
-    //                  {"dept": "Sales", 
-    //                   "12:00:00 sum-salary": "750", 
-    //                   "13:00:00 sum-salary": "null"}];
-    // });
-    //   
-    // it("should pivot ", function (done) {
-    //   var query = "select sum(salary) pivot dept, lunchTime";
-    //   var expected = [{"dept": "Eng", 
-    //                  "12:00:00 sum-salary": "1500", 
-    //                  "13:00:00 sum-salary": "600"}, 
-    //                  {"dept": "Marketing", 
-    //                   "12:00:00 sum-salary": "null", 
-    //                   "13:00:00 sum-salary": "800"}, 
-    //                  {"dept": "Sales", 
-    //                   "12:00:00 sum-salary": "750", 
-    //                   "13:00:00 sum-salary": "null"}];
-    // });
-    //   
-    // it("should pivot ", function (done) {
-    //   var query = "select sum(salary), max(lunchTime) pivot dept";
-    //   var expected = [{"dept": "Eng", 
-    //                  "12:00:00 sum-salary": "1500", 
-    //                  "13:00:00 sum-salary": "600"}, 
-    //                  {"dept": "Marketing", 
-    //                   "12:00:00 sum-salary": "null", 
-    //                   "13:00:00 sum-salary": "800"}, 
-    //                  {"dept": "Sales", 
-    //                   "12:00:00 sum-salary": "750", 
-    //                   "13:00:00 sum-salary": "null"}];
-    // });
+    it("should pivot ", function (done) {
+      var query = "select dept, sum(salary) group by dept pivot lunchTime";
+      var expected = [{"dept": "Eng", 
+                     "12:00:00 sum-salary": "1500", 
+                     "13:00:00 sum-salary": "600"}, 
+                     {"dept": "Marketing", 
+                      "12:00:00 sum-salary": "null", 
+                      "13:00:00 sum-salary": "800"}, 
+                     {"dept": "Sales", 
+                      "12:00:00 sum-salary": "750", 
+                      "13:00:00 sum-salary": "null"}];
+    });
+      
+    it("should pivot ", function (done) {
+      var query = "select lunchTime, sum(salary) group by lunchTime pivot dept";
+      var expected = [{"dept": "Eng", 
+                     "12:00:00 sum-salary": "1500", 
+                     "13:00:00 sum-salary": "600"}, 
+                     {"dept": "Marketing", 
+                      "12:00:00 sum-salary": "null", 
+                      "13:00:00 sum-salary": "800"}, 
+                     {"dept": "Sales", 
+                      "12:00:00 sum-salary": "750", 
+                      "13:00:00 sum-salary": "null"}];
+    });
+      
+    it("should pivot ", function (done) {
+      var query = "select sum(salary) pivot dept, lunchTime";
+      var expected = [{"dept": "Eng", 
+                     "12:00:00 sum-salary": "1500", 
+                     "13:00:00 sum-salary": "600"}, 
+                     {"dept": "Marketing", 
+                      "12:00:00 sum-salary": "null", 
+                      "13:00:00 sum-salary": "800"}, 
+                     {"dept": "Sales", 
+                      "12:00:00 sum-salary": "750", 
+                      "13:00:00 sum-salary": "null"}];
+    });
+      
+    it("should pivot ", function (done) {
+      var query = "select sum(salary), max(lunchTime) pivot dept";
+      var expected = [{"dept": "Eng", 
+                     "12:00:00 sum-salary": "1500", 
+                     "13:00:00 sum-salary": "600"}, 
+                     {"dept": "Marketing", 
+                      "12:00:00 sum-salary": "null", 
+                      "13:00:00 sum-salary": "800"}, 
+                     {"dept": "Sales", 
+                      "12:00:00 sum-salary": "750", 
+                      "13:00:00 sum-salary": "null"}];
+    });
   });
 
 });
