@@ -19,17 +19,12 @@ GQL.prototype.gql = function (fun, opts, callback) {
   }
 
   if (typeof fun === 'object') {
-    try {
-      return this.viewQuery(fun, opts);
-    } catch (err) {
-      return opts.complete(err);
-    }
+    return viewQuery(this.db, fun, opts);
   }
 
   return opts.complete(GQL.Errors.UNRECOGNIZED_QUERY);
 };
-GQL.prototype.viewQuery = function (query, options) {
-  var db = this.db;
+function viewQuery(db, query, options) {
   if (!options.complete) {
     return;
   }
@@ -979,7 +974,7 @@ GQL.prototype.viewQuery = function (query, options) {
       checkComplete();
     }
   });
-};
+}
 GQL.Errors = {
   UNRECOGNIZED_QUERY: {
     status: 400,
@@ -1015,12 +1010,6 @@ GQL.Errors = {
     };
   }
 };
-// because we don't want viewQuery to be enumerable
-Object.defineProperty(GQL.prototype, "viewQuery", {
-  value: GQL.prototype.viewQuery,
-  configurable: true,
-  writable: true
-});
 // Deletion is a noop since we dont store the results of the view
 GQL._delete = function () {};
 
