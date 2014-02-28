@@ -93,7 +93,7 @@ describe('GQL', function () {
   });
   it('should be able to work', function (done) {
     should.not.exist(db.gql);
-    PouchDB.plugin('gql', GQL);
+    PouchDB.plugin(GQL);
     PouchDB('testdb', function (err, db) {
       var throwaway = db.gql.should.exist;
       done();
@@ -162,7 +162,6 @@ describe('GQL', function () {
         "seniorityStartTime": "2007-12-30 14:40:00"
       }];
 
-      PouchDB.plugin('gql', GQL);
       PouchDB('testdb', function (err, db) {
         db.gql(query, function (err, actual) {
           if (!err) {
@@ -203,7 +202,7 @@ describe('GQL', function () {
         "salary": "800"
       }];
 
-      PouchDB.plugin('gql', GQL);
+      
       PouchDB('testdb', function (err, db) {
         db.gql(query, function (err, actual) {
           if (!err) {
@@ -231,7 +230,7 @@ describe('GQL', function () {
     //                  {"lunchTime": "12:00:00", "name": "Dana"}, 
     //                  {"lunchTime": "13:00:00", "name": "Mike"}];
     //   
-    //   PouchDB.plugin('gql', GQL);
+    //   
     //   PouchDB('testdb',function (err,db){
     //       db.gql(query, function (err, actual){
     //         if(!err){
@@ -276,7 +275,7 @@ describe('GQL', function () {
         name: "Mike"
       }];
 
-      PouchDB.plugin('gql', GQL);
+      
       PouchDB('testdb', function (err, db) {
         db.gql(query, function (err, actual) {
           if (!err) {
@@ -304,7 +303,7 @@ describe('GQL', function () {
         "name": "John"
       }];
 
-      PouchDB.plugin('gql', GQL);
+      
       PouchDB('testdb', function (err, db) {
         db.gql(query, function (err, actual) {
           if (!err) {
@@ -334,7 +333,7 @@ describe('GQL', function () {
     //   var expected = [{"isSenior": true, "average-salary": "2"}, 
     //                  {"isSenior": false, "average-salary": "1"}]; 
     //    
-    //   PouchDB.plugin('gql', GQL);
+    //   
     //   PouchDB('testdb',function (err,db){
     //       db.gql(query, function (err, actual){
     //         if(!err){
@@ -371,7 +370,7 @@ describe('GQL', function () {
         "Sales sum-salary": "750"
       }];
 
-      PouchDB.plugin('gql', GQL);
+      
       PouchDB('testdb', function (err, db) {
         db.gql(query, function (err, actual) {
           if (!err) {
