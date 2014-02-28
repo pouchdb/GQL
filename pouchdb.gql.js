@@ -1,14 +1,7 @@
 "use strict";
 var pouchCollate = require('pouchdb-collate');
 
-function GQL(db) {
-  if (!(this instanceof GQL)) {
-    return new GQL(db);
-  }
-  this.db = db;
-}
-GQL.prototype.gql = function (fun, opts, callback) {
-
+exports.gql = function (fun, opts, callback) {
   if (typeof opts === 'function') {
     callback = opts;
     opts = {};
@@ -19,7 +12,7 @@ GQL.prototype.gql = function (fun, opts, callback) {
   }
 
   if (typeof fun === 'object') {
-    return viewQuery(this.db, fun, opts);
+    return viewQuery(this, fun, opts);
   }
 
   return opts.complete(GQL.Errors.UNRECOGNIZED_QUERY);
@@ -975,6 +968,7 @@ function viewQuery(db, query, options) {
     }
   });
 }
+var GQL = {};
 GQL.Errors = {
   UNRECOGNIZED_QUERY: {
     status: 400,
@@ -1010,11 +1004,8 @@ GQL.Errors = {
     };
   }
 };
-// Deletion is a noop since we dont store the results of the view
-GQL._delete = function () {};
+
 
 if (typeof window !== 'undefined' && window.PouchDB) {
-  window.PouchDB.plugin('gql', GQL);
+  window.PouchDB.plugin(exports);
 }
-
-module.exports = GQL;
