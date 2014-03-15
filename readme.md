@@ -13,7 +13,7 @@ Note that only identifiers and string literals are case-sensitive.
 
 ## Usage
 
-In the browser simply add pouchdb.gql.js in a script tag after the pouchdb script tag, otherwise in node or with AMD after getting GQL in scope (i.e. `var GQL = require('GQL');`) then you must register the plugin with `PouchDB.plugin('gql', GQL);`
+In the browser simply add pouchdb.gql.js in a script tag after the pouchdb script tag, otherwise in node or with AMD after getting GQL in scope (i.e. `var GQL = require('GQL');`) then you must register the plugin with `PouchDB.plugin({ gql: GQL });`
 
 ### Language Syntax
 
