@@ -1,5 +1,7 @@
 # GQL
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/pouchdb/GQL.svg)](https://greenkeeper.io/)
+
 The Google Query Language (GQL) interface provides an alternative method for accessing data.
 The version of GQL implemented here is based on the Google Visualization API Query Language
 (https://developers.google.com/chart/interactive/docs/querylanguage).
